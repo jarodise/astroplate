@@ -1,8 +1,9 @@
 ---
 # Banner
 banner:
-  title: "The Ultimate Starter Template You Need To Start Your Astro Project"
-  content: "Astroplate is a free starter template built with Astro and TailwindCSS, providing everything you need to jumpstart your Astro project and save valuable time."
+
+  title: "Picking a suitable Chinese name can be tricky, let me help you!"
+  content: "Simply type in your preference in the fields below and hit the \"Generate Name\" button, a Chinese name with desired meaning and detailed explanation will show in a few seconds."
   image: "/images/banner.png"
   button:
     enable: false

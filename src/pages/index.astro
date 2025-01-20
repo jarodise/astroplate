@@ -39,7 +39,7 @@ const { banner, features } = homepage.data as Homepage;
 
 <Base>
   <!-- Banner -->
-  <section class="section pt-14">
+  <section class="section pt-14 pb-0">
     <div class="container">
       <div class="row justify-center">
         <div class="lg:col-7 md:col-9 mb-8 text-center">
@@ -48,34 +48,66 @@ const { banner, features } = homepage.data as Homepage;
             class="mb-4 text-h3 lg:text-h1"
           />
           <p set:html={markdownify(banner.content)} class="mb-8" />
-          {
-            banner.button.enable && (
-              <a
-                class="btn btn-primary"
-                href={banner.button.link}
-                target={
-                  banner.button.link.startsWith("http") ? "_blank" : "_self"
-                }
-                rel="noopener"
-              >
-                {banner.button.label}
-              </a>
-            )
-          }
+          {banner.button.enable && (
+            <a class="btn btn-primary" href={banner.button.link}>
+              {banner.button.label}
+            </a>
+          )}
         </div>
-        {
-          banner.image && (
-            <div class="col-12">
-              <ImageMod
-                src={banner.image}
-                height={380}
-                width={1200}
-                alt="banner"
-                format="webp"
-              />
+      </div>
+    </div>
+  </section>
+
+  <!-- Chinese Name Generator -->
+  <section class="section pt-0">
+    <div class="container">
+      <div class="row pb-0">
+        <div class="col-12 md:col-6 lg:col-6">
+          <form id="nameGeneratorForm" class="contact-form">
+            <div class="mb-6">
+              <label for="gender" class="form-label">
+                Gender <span class="text-red-500">*</span>
+              </label>
+              <select id="gender" class="form-input" name="gender" required>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="neutral">Gender Neutral</option>
+              </select>
             </div>
-          )
-        }
+            <div class="mb-6">
+              <label for="characters" class="form-label">
+                Number of Characters <span class="text-red-500">*</span>
+              </label>
+              <select id="characters" class="form-input" name="characters" required>
+                <option value="2">Two Characters</option>
+                <option value="3">Three Characters</option>
+              </select>
+            </div>
+            <div class="mb-6">
+              <label for="meaning" class="form-label">
+                Desired Meaning
+              </label>
+              <select id="meaning" class="form-input" name="meaning">
+                <option value="wisdom">Wisdom & Intelligence</option>
+                <option value="strength">Strength & Power</option>
+                <option value="beauty">Beauty & Grace</option>
+                <option value="success">Success & Prosperity</option>
+                <option value="peace">Peace & Harmony</option>
+              </select>
+            </div>
+
+          </form>
+        </div>
+        <div class="col-12 md:col-6 lg:col-6">
+          <div id="generatedName" class="text-center p-6 bg-theme-light dark:bg-darkmode-theme-light rounded-lg">
+            <h2 class="h3 mb-4">Your Chinese Name</h2>
+            <div id="chineseName" class="text-4xl mb-2">名字</div>
+            <div id="pinyinName" class="text-xl mb-4">míng zì</div>
+            <div id="nameExplanation" class="text-sm">
+              Click "Generate Name" to create your Chinese name
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -125,3 +157,47 @@ const { banner, features } = homepage.data as Homepage;
   <Testimonial testimonial={testimonial} />
   <CallToAction call_to_action={call_to_action} />
 </Base>
+
+<script>
+  document.getElementById("nameGeneratorForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const mockNames = {
+      male: {
+        wisdom: [{ name: "智宇", pinyin: "Zhì Yǔ", meaning: "Wise universe" },
+                { name: "哲明", pinyin: "Zhé Míng", meaning: "Philosophy and brightness" }],
+        strength: [{ name: "强华", pinyin: "Qiáng Huá", meaning: "Strong and magnificent" },
+                  { name: "威武", pinyin: "Wēi Wǔ", meaning: "Powerful and martial" }],
+        beauty: [{ name: "俊杰", pinyin: "Jùn Jié", meaning: "Handsome and outstanding" }],
+        success: [{ name: "志远", pinyin: "Zhì Yuǎn", meaning: "Ambitious goals" }],
+        peace: [{ name: "安泰", pinyin: "Ān Tài", meaning: "Peaceful and secure" }]
+      },
+      female: {
+        wisdom: [{ name: "慧雅", pinyin: "Huì Yǎ", meaning: "Wise and elegant" },
+                { name: "思涵", pinyin: "Sī Hán", meaning: "Thoughtful and inclusive" }],
+        strength: [{ name: "巧玲", pinyin: "Qiǎo Líng", meaning: "Skillful and delicate" }],
+        beauty: [{ name: "美玲", pinyin: "Měi Líng", meaning: "Beautiful bell" },
+                { name: "雅婷", pinyin: "Yǎ Tíng", meaning: "Elegant and graceful" }],
+        success: [{ name: "秀英", pinyin: "Xiù Yīng", meaning: "Outstanding and talented" }],
+        peace: [{ name: "静怡", pinyin: "Jìng Yí", meaning: "Tranquil and happy" }]
+      },
+      neutral: {
+        wisdom: [{ name: "昊天", pinyin: "Hào Tiān", meaning: "Vast sky" },
+                { name: "博文", pinyin: "Bó Wén", meaning: "Extensive knowledge" }],
+        strength: [{ name: "宇轩", pinyin: "Yǔ Xuān", meaning: "Universe vastness" }],
+        beauty: [{ name: "雨桐", pinyin: "Yǔ Tóng", meaning: "Rain and phoenix tree" }],
+        success: [{ name: "运昌", pinyin: "Yùn Chāng", meaning: "Prosperous fortune" }],
+        peace: [{ name: "和安", pinyin: "Hé Ān", meaning: "Harmonious peace" }]
+      }
+    };
+
+    const gender = (document.getElementById("gender") as HTMLSelectElement).value;
+    const meaning = (document.getElementById("meaning") as HTMLSelectElement).value;
+    const nameList = mockNames[gender as keyof typeof mockNames][meaning as keyof (typeof mockNames)[typeof gender]];
+    const randomName = nameList[Math.floor(Math.random() * nameList.length)];
+    
+    // Update the display
+    document.getElementById("chineseName")!.textContent = randomName.name;
+    document.getElementById("pinyinName")!.textContent = randomName.pinyin;
+    document.getElementById("nameExplanation")!.textContent = randomName.meaning;
+  });
+</script>
